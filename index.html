@@ -6,6 +6,7 @@
     <title>Unity WebGL Player | Magnet truck</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <script type="text/javascript" src="//vkplay.ru/app/22543/static/mailru.core.js"></script>
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -17,18 +18,13 @@
         </div>
       </div>
       <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Magnet truck</div>
-      </div>
     </div>
     <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      //var fullscreenButton = document.querySelector("#unity-fullscreen-button");
       var warningBanner = document.querySelector("#unity-warning");
 
       // Shows a temporary message banner/ribbon for a few seconds, or
@@ -86,22 +82,93 @@
         canvas.style.height = "600px";
       }
       loadingBar.style.display = "block";
-
+var instanceUnity;
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
+          instanceUnity=unityInstance;
           loadingBar.style.display = "none";
-          fullscreenButton.onclick = () => {
-            unityInstance.SetFullscreen(1);
-          };
+          //fullscreenButton.onclick = () => {
+           // unityInstance.SetFullscreen(1);
+          //};
         }).catch((message) => {
           alert(message);
         });
       };
       document.body.appendChild(script);
     </script>
+    <script>
+  
+  var showForVK = null;
+  var adConfig = null;
+  var rewParams=null;
+        
+  function showAdsForVk(configJson,rewJson){
+    adConfig  = JSON.parse(configJson);
+    rewParams=rewJson;
+    showForVK.showAds(adConfig);
+  }
+  
+    (function apiHandshake(iframeApi) {
+        if (typeof iframeApi === 'undefined') {
+            console.log('Cannot find iframeApi function, are we inside an iframe?');
+            return;
+        }
+
+        var externalApi = null;
+
+        var callbacks = {
+            appid: 22543,
+
+            getLoginStatusCallback: function(status) {},
+            userInfoCallback: function(info) {},
+            userProfileCallback: function(profile) {},
+            registerUserCallback: function(info) {},
+            paymentFrameUrlCallback: function(url) {},
+            getAuthTokenCallback: function(token) {},
+            paymentReceivedCallback: function(data) {},
+            paymentWindowClosedCallback: function() {},
+            userConfirmCallback: function() {},
+            paymentFrameItem: function(object) {},
+            getGameInventoryItems: function() {},
+      adsCallback: function(context)
+          {
+            if(context.type==='adCompleted')
+            {
+              if(adConfig.interstitial)
+              {
+                //window.alert("interstitial ad completed");
+              }
+              else
+              {
+                instanceUnity.SendMessage('VK_API','GetReward',rewParams);
+              }
+            }
+            else if(context.type==='adDismissed')
+            {
+             // window.alert("ad Dismissed");
+            }
+            else if(context.type==='adError')
+            {
+              // window.alert("ad Error");
+            }
+          }
+        };
+
+        function error(err) {
+            throw new Error('Could not init external api ' + err);
+        }
+
+        function connected(api) {
+            externalApi = api;
+      showForVK = externalApi;
+        }
+
+        iframeApi(callbacks).then(connected, error);
+    }(window.iframeApi));
+</script>
   </body>
 </html>
