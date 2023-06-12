@@ -99,12 +99,7 @@ var instanceUnity;
         });
       };
       document.body.appendChild(script);
-      // 'beforeunload' event listener to perform cleanup or finalization tasks
-window.addEventListener('beforeunload', function(event) {
-    instanceUnity.SendMessage('Autosave','Save');
-    event.returnValue = undefined;
-});
-    </script>
+   </script>
     <script>
   
   var showForVK = null;
