@@ -99,6 +99,10 @@ var instanceUnity;
         });
       };
       document.body.appendChild(script);
+      window.addEventListener('beforeunload', function(event) {
+  instanceUnity.SendMessage('Autosave','Save');
+    event.returnValue = undefined;
+});
    </script>
     <script>
   
