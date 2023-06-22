@@ -6,7 +6,7 @@
     <title>Unity WebGL Player | Magnet truck</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    <script type="text/javascript" src="//vkplay.ru/app/22543/static/mailru.core.js"></script>
+    
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -99,76 +99,7 @@ var instanceUnity;
         });
       };
       document.body.appendChild(script);
-     </script>
-    <script>
-  
-  var showForVK = null;
-  var adConfig = null;
-  var rewParams=null;
-        
-  function showAdsForVk(configJson,rewJson){
-    adConfig  = JSON.parse(configJson);
-    rewParams=rewJson;
-    showForVK.showAds(adConfig);
-  }
-  
-    (function apiHandshake(iframeApi) {
-        if (typeof iframeApi === 'undefined') {
-            console.log('Cannot find iframeApi function, are we inside an iframe?');
-            return;
-        }
-
-        var externalApi = null;
-
-        var callbacks = {
-            appid: 22543,
-
-            getLoginStatusCallback: function(status) {},
-            userInfoCallback: function(info) {},
-            userProfileCallback: function(profile) {},
-            registerUserCallback: function(info) {},
-            paymentFrameUrlCallback: function(url) {},
-            getAuthTokenCallback: function(token) {},
-            paymentReceivedCallback: function(data) {},
-            paymentWindowClosedCallback: function() {},
-            userConfirmCallback: function() {},
-            paymentFrameItem: function(object) {},
-            getGameInventoryItems: function() {},
-      adsCallback: function(context)
-          {
-            if(context.type==='adCompleted')
-            {
-              if(adConfig.interstitial)
-              {
-                //window.alert("interstitial ad completed");
-              }
-              else
-              {
-                instanceUnity.SendMessage('VK_API','GetReward',rewParams);
-              }
-            }
-            else if(context.type==='adDismissed')
-            {
-             // window.alert("ad Dismissed");
-            }
-            else if(context.type==='adError')
-            {
-              // window.alert("ad Error");
-            }
-          }
-        };
-
-        function error(err) {
-            throw new Error('Could not init external api ' + err);
-        }
-
-        function connected(api) {
-            externalApi = api;
-      showForVK = externalApi;
-        }
-
-        iframeApi(callbacks).then(connected, error);
-    }(window.iframeApi));
-</script>
+    </script>
+    
   </body>
 </html>
